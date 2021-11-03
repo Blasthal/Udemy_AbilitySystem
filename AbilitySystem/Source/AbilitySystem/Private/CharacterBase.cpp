@@ -9,6 +9,7 @@ ACharacterBase::ACharacterBase()
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
+	AbilitySystemComponent = CreateDefaultSubobject<UAbilitySystemComponent>(TEXT("AbilitySystemComponent"));
 }
 
 // Called when the game starts or when spawned
@@ -32,3 +33,33 @@ void ACharacterBase::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 
 }
 
+
+UAbilitySystemComponent* ACharacterBase::GetAbilitySystemComponent() const
+{
+	return AbilitySystemComponent;
+}
+
+
+void ACharacterBase::AcquireAbility(TSubclassOf<UGameplayAbility> AbilityToAcquire)
+{
+	ensure(AbilityToAcquire);
+	if (!AbilityToAcquire)
+	{
+		return;
+	}
+
+	ensure(AbilitySystemComponent);
+	if (!AbilitySystemComponent)
+	{
+		return;
+	}
+
+
+	if (HasAuthority())
+	{
+		const FGameplayAbilitySpec AbilitySpec(AbilityToAcquire);
+		AbilitySystemComponent->GiveAbility(AbilitySpec);
+
+		AbilitySystemComponent->InitAbilityActorInfo(this, this);
+	}
+}
