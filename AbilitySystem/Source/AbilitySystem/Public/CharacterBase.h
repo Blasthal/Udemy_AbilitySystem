@@ -32,13 +32,18 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 
-	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
+	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const;
 
 	UFUNCTION(BlueprintCallable, Category = "CharacterBase")
 	void AcquireAbility(TSubclassOf<UGameplayAbility> AbilityToAcquire);
 
 
 protected:
+	// アビリティシステムコンポーネント
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "CharacterBase")
-	UAbilitySystemComponent* AbilitySystemComponent;
+	class UAbilitySystemComponent* AbilitySystemComponent;
+
+	// 属性コンポーネント
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "CharacterBase")
+	class UAttributeSetBase* AttributeSetBaseComponent;
 };

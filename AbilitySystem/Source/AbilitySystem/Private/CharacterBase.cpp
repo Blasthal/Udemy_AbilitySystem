@@ -3,6 +3,8 @@
 
 #include "CharacterBase.h"
 
+#include "AttributeSetBase.h"
+
 // Sets default values
 ACharacterBase::ACharacterBase()
 {
@@ -10,6 +12,7 @@ ACharacterBase::ACharacterBase()
 	PrimaryActorTick.bCanEverTick = true;
 
 	AbilitySystemComponent = CreateDefaultSubobject<UAbilitySystemComponent>(TEXT("AbilitySystemComponent"));
+	AttributeSetBaseComponent = CreateDefaultSubobject<UAttributeSetBase>(TEXT("AttributeSetBase"));
 }
 
 // Called when the game starts or when spawned
