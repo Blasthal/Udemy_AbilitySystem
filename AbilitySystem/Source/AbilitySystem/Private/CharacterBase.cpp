@@ -1,9 +1,11 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+﻿// Fill out your copyright notice in the Description page of Project Settings.
 
 
 #include "CharacterBase.h"
 
+#include "AIController.h"
 #include "AttributeSetBase.h"
+#include "BrainComponent.h"
 
 // Sets default values
 ACharacterBase::ACharacterBase()
@@ -21,6 +23,8 @@ void ACharacterBase::BeginPlay()
 	Super::BeginPlay();
 
 	AttributeSetBaseComponent->OnHealthChange.AddDynamic(this, &ACharacterBase::OnHealthChanged);
+
+	AutoDetermineTeamIDbyControllerType();
 }
 
 // Called every frame
@@ -71,7 +75,7 @@ void ACharacterBase::AcquireAbility(TSubclassOf<UGameplayAbility> AbilityToAcqui
 
 void ACharacterBase::OnHealthChanged(float Health, float MaxHealth)
 {
-	// ����ł���Ȃ牽�����Ȃ�
+	// 死んでいるなら何もしない
 	if (bIsDead)
 	{
 		return;
@@ -80,10 +84,50 @@ void ACharacterBase::OnHealthChanged(float Health, float MaxHealth)
 
 	BP_OnHealthChanged(Health, MaxHealth);
 
-	// HP0�̎��͒ǉ��ŏ������Ă�
+	// HP0の時は追加で処理を呼ぶ
 	if (Health <= 0.0f)
 	{
 		bIsDead = true;
+
+		Dead();
 		BP_Die();
+	}
+}
+
+
+bool ACharacterBase::IsOtherHostile(const ACharacterBase* Other) const
+{
+	return (TeamID != Other->TeamID);
+}
+
+
+void ACharacterBase::AutoDetermineTeamIDbyControllerType()
+{
+	if (const AController* SelfController = GetController())
+	{
+		if (SelfController->IsPlayerController())
+		{
+			TeamID = 0;
+		}
+	}
+}
+
+
+void ACharacterBase::Dead()
+{
+	// プレイヤー側の入力を無効にする
+	APlayerController* PlayerController = Cast<APlayerController>(GetController());
+	if (IsValid(PlayerController))
+	{
+		PlayerController->DisableInput(PlayerController);
+		return;
+	}
+
+	// AI側の入力を無効にする
+	const AAIController* AIController = Cast<AAIController>(GetController());
+	if (IsValid(AIController))
+	{
+		AIController->GetBrainComponent()->StopLogic("Dead");
+		return;
 	}
 }

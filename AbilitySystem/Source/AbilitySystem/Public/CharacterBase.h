@@ -37,17 +37,7 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "CharacterBase")
 	void AcquireAbility(TSubclassOf<UGameplayAbility> AbilityToAcquire);
 
-
-protected:
-	// アビリティシステムコンポーネント
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "CharacterBase")
-	class UAbilitySystemComponent* AbilitySystemComponent;
-
-	// 属性コンポーネント
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "CharacterBase")
-	class UAttributeSetBase* AttributeSetBaseComponent;
-
-
+	
 private:
 	// HP変更時のコールバック
 	UFUNCTION()
@@ -62,6 +52,31 @@ protected:
 	UFUNCTION(BlueprintImplementableEvent, Category = "CharacterBase", meta = (DisplayName = "OnDie"))
 	void BP_Die();
 
+
+protected:
+	// 自分にとってOtherが敵かどうか
+	UFUNCTION(BlueprintCallable, Category = "CharacterBase")
+	bool IsOtherHostile(const ACharacterBase* Other) const;
+
+private:
+	void AutoDetermineTeamIDbyControllerType();
+
+
+private:
+	void Dead();
+
+
+protected:
+	// アビリティシステムコンポーネント
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "CharacterBase")
+	class UAbilitySystemComponent* AbilitySystemComponent;
+
+	// 属性コンポーネント
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "CharacterBase")
+	class UAttributeSetBase* AttributeSetBaseComponent;
+
+
 private:
 	bool bIsDead = false;
+	uint8 TeamID = 255;
 };
