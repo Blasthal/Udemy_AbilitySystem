@@ -17,10 +17,21 @@ void UAttributeSetBase::PostGameplayEffectExecute(const FGameplayEffectModCallba
 	Super::PostGameplayEffectExecute(Data);
 
 	const bool bSuccess = (Data.EvaluatedData.Attribute.GetUProperty() == FindFieldChecked<UProperty>(UAttributeSetBase::StaticClass(), GET_MEMBER_NAME_CHECKED(UAttributeSetBase, Health)));
-	if (bSuccess)
+	if (!bSuccess)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Damaged. Health: %f"), Health.GetCurrentValue());
-
-		OnHealthChange.Broadcast(Health.GetCurrentValue(), MaxHealth.GetCurrentValue());
+		return;
 	}
+
+	// クランプ
+	const float ClampedCurrentValue = FMath::Clamp(Health.GetCurrentValue(), 0.0f, MaxHealth.GetCurrentValue());
+	Health.SetCurrentValue(ClampedCurrentValue);
+
+	// ※ベースの方は別に揃える必要無くない？
+	//const float ClampedBaseValue = FMath::Clamp(Health.GetBaseValue(), 0.0f, MaxHealth.GetCurrentValue());
+	//Health.SetBaseValue(ClampedBaseValue);
+
+	UE_LOG(LogTemp, Warning, TEXT("Damaged. Health: %f"), Health.GetCurrentValue());
+
+	// HPの変動を放送する
+	OnHealthChange.Broadcast(Health.GetCurrentValue(), MaxHealth.GetCurrentValue());
 }

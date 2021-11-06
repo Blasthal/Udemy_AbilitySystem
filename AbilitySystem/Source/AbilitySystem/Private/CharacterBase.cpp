@@ -71,5 +71,19 @@ void ACharacterBase::AcquireAbility(TSubclassOf<UGameplayAbility> AbilityToAcqui
 
 void ACharacterBase::OnHealthChanged(float Health, float MaxHealth)
 {
+	// €‚ñ‚Å‚¢‚é‚È‚ç‰½‚à‚µ‚È‚¢
+	if (bIsDead)
+	{
+		return;
+	}
+
+
 	BP_OnHealthChanged(Health, MaxHealth);
+
+	// HP0‚Ì‚Í’Ç‰Á‚Åˆ—‚ğŒÄ‚Ô
+	if (Health <= 0.0f)
+	{
+		bIsDead = true;
+		BP_Die();
+	}
 }

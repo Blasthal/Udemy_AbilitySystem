@@ -57,4 +57,11 @@ protected:
 	// HP変更時のコールバック
 	UFUNCTION(BlueprintImplementableEvent, Category = "CharacterBase", meta = (DisplayName = "OnHealthChanged"))
 	void BP_OnHealthChanged(float Health, float MaxHealth);
+
+	// HP0時のコールバック
+	UFUNCTION(BlueprintImplementableEvent, Category = "CharacterBase", meta = (DisplayName = "OnDie"))
+	void BP_Die();
+
+private:
+	bool bIsDead = false;
 };
