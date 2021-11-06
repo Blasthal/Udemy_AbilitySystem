@@ -46,4 +46,15 @@ protected:
 	// 属性コンポーネント
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "CharacterBase")
 	class UAttributeSetBase* AttributeSetBaseComponent;
+
+
+private:
+	// HP変更時のコールバック
+	UFUNCTION()
+	void OnHealthChanged(float Health, float MaxHealth);
+
+protected:
+	// HP変更時のコールバック
+	UFUNCTION(BlueprintImplementableEvent, Category = "CharacterBase", meta = (DisplayName = "OnHealthChanged"))
+	void BP_OnHealthChanged(float Health, float MaxHealth);
 };
