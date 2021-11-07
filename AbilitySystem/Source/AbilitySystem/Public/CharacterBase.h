@@ -36,7 +36,7 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "CharacterBase")
 	void AcquireAbility(TSubclassOf<UGameplayAbility> AbilityToAcquire);
-
+	
 	
 private:
 	// HP変更時のコールバック
@@ -51,6 +51,36 @@ protected:
 	// HP0時のコールバック
 	UFUNCTION(BlueprintImplementableEvent, Category = "CharacterBase", meta = (DisplayName = "OnDie"))
 	void BP_Die();
+
+	
+private:
+	// Mana変更時のコールバック
+	UFUNCTION()
+	void OnManaChanged(float CurrentMana, float MaxMana);
+
+protected:
+	// Mana変更時のコールバック
+	UFUNCTION(BlueprintImplementableEvent, Category = "CharacterBase", meta = (DisplayName = "OnManaChanged"))
+	void BP_OnManaChanged(float CurerntMana, float MaxMana);
+
+
+private:
+	// Strength変更時のコールバック
+	UFUNCTION()
+	void OnStrengthChanged(float CurrentStrength, float MaxStrength);
+
+protected:
+	// Strength変更時のコールバック
+	UFUNCTION(BlueprintImplementableEvent, Category = "CharacterBase", meta = (DisplayName = "OnStrengthChanged"))
+	void BP_OnStrengthChanged(float CurerntStrength, float MaxStrength);
+
+
+public:
+	UFUNCTION(BlueprintCallable, Category = "CharacterBase")
+	void AddGameplayTag(FGameplayTag Tag);
+	
+	UFUNCTION(BlueprintCallable, Category = "CharacterBase")
+	void RemoveGameplayTag(FGameplayTag Tag);
 
 
 protected:
@@ -79,4 +109,10 @@ protected:
 private:
 	bool bIsDead = false;
 	uint8 TeamID = 255;
+
+
+public:
+	// HP満タン状態のゲームプレイタグ
+	UPROPERTY(EditAnywhere, Category = "CharacterBase")
+	FGameplayTag FullHealthTag;
 };

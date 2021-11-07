@@ -23,8 +23,13 @@ void ACharacterBase::BeginPlay()
 	Super::BeginPlay();
 
 	AttributeSetBaseComponent->OnHealthChange.AddDynamic(this, &ACharacterBase::OnHealthChanged);
+	AttributeSetBaseComponent->OnManaChange.AddDynamic(this, &ACharacterBase::OnManaChanged);
+	AttributeSetBaseComponent->OnStrengthChange.AddDynamic(this, &ACharacterBase::OnStrengthChanged);
 
 	AutoDetermineTeamIDbyControllerType();
+
+	// 初期ではHP満タン
+	AddGameplayTag(FullHealthTag);
 }
 
 // Called every frame
@@ -92,6 +97,33 @@ void ACharacterBase::OnHealthChanged(float Health, float MaxHealth)
 		Dead();
 		BP_Die();
 	}
+}
+
+
+void ACharacterBase::OnManaChanged(float CurrentMana, float MaxMana)
+{
+	BP_OnManaChanged(CurrentMana, MaxMana);
+}
+
+
+void ACharacterBase::OnStrengthChanged(float CurrentStrength, float MaxStrength)
+{
+	BP_OnStrengthChanged(CurrentStrength, MaxStrength);
+}
+
+
+void ACharacterBase::AddGameplayTag(FGameplayTag Tag)
+{
+	GetAbilitySystemComponent()->AddLooseGameplayTag(Tag);
+
+	// 1つだけに絞る
+	GetAbilitySystemComponent()->SetLooseGameplayTagCount(Tag, 1);
+}
+
+
+void ACharacterBase::RemoveGameplayTag(FGameplayTag Tag)
+{
+	GetAbilitySystemComponent()->RemoveLooseGameplayTag(Tag);
 }
 
 
