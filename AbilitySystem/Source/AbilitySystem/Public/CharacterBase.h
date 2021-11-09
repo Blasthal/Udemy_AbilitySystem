@@ -96,13 +96,13 @@ private:
 	void Dead();
 
 
-protected:
+private:
 	// アビリティシステムコンポーネント
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "CharacterBase")
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "CharacterBase", meta = (AllowPrivateAccess = "true"))
 	class UAbilitySystemComponent* AbilitySystemComponent;
 
 	// 属性コンポーネント
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "CharacterBase")
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "CharacterBase", meta = (AllowPrivateAccess = "true"))
 	class UAttributeSetBase* AttributeSetBaseComponent;
 
 

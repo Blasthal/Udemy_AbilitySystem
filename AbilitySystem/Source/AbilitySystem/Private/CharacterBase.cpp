@@ -129,6 +129,12 @@ void ACharacterBase::RemoveGameplayTag(FGameplayTag Tag)
 
 bool ACharacterBase::IsOtherHostile(const ACharacterBase* Other) const
 {
+	ensure(Other);
+	if (!Other)
+	{
+		return false;
+	}
+
 	return (TeamID != Other->TeamID);
 }
 
