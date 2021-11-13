@@ -34,10 +34,12 @@ public:
 
 	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const;
 
+
+	// GameplayAbilityを適用する
 	UFUNCTION(BlueprintCallable, Category = "CharacterBase")
 	void AcquireAbility(TSubclassOf<UGameplayAbility> AbilityToAcquire);
-	
-	
+
+
 private:
 	// HP変更時のコールバック
 	UFUNCTION()
@@ -94,6 +96,8 @@ private:
 
 private:
 	void Dead();
+	void EnableInputControl();
+	void DisableInputControl();
 
 
 private:
@@ -104,6 +108,15 @@ private:
 	// 属性コンポーネント
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "CharacterBase", meta = (AllowPrivateAccess = "true"))
 	class UAttributeSetBase* AttributeSetBaseComponent;
+
+
+public:
+	// スタンさせる
+	UFUNCTION(BlueprintCallable, Category = "CharacterBase")
+	void HitStun(float StunDurationTimeSecond);
+
+private:
+	FTimerHandle StunTimeHandle;
 
 
 private:

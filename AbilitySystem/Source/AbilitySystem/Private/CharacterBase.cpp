@@ -153,6 +153,39 @@ void ACharacterBase::AutoDetermineTeamIDbyControllerType()
 
 void ACharacterBase::Dead()
 {
+	DisableInputControl();
+}
+
+
+void ACharacterBase::EnableInputControl()
+{
+	// 死んでいるなら処理しない
+	if (bIsDead)
+	{
+		return;
+	}
+
+
+	// プレイヤー側の入力を有効にする
+	APlayerController* PlayerController = Cast<APlayerController>(GetController());
+	if (IsValid(PlayerController))
+	{
+		PlayerController->EnableInput(PlayerController);
+		return;
+	}
+
+	// AI側の入力を有効にする
+	const AAIController* AIController = Cast<AAIController>(GetController());
+	if (IsValid(AIController))
+	{
+		AIController->GetBrainComponent()->RestartLogic();
+		return;
+	}
+}
+
+
+void ACharacterBase::DisableInputControl()
+{
 	// プレイヤー側の入力を無効にする
 	APlayerController* PlayerController = Cast<APlayerController>(GetController());
 	if (IsValid(PlayerController))
@@ -168,4 +201,12 @@ void ACharacterBase::Dead()
 		AIController->GetBrainComponent()->StopLogic("Dead");
 		return;
 	}
+}
+
+
+void ACharacterBase::HitStun(float StunDurationTimeSecond)
+{
+	DisableInputControl();
+
+	GetWorldTimerManager().SetTimer(StunTimeHandle, this, &ACharacterBase::EnableInputControl, StunDurationTimeSecond, false, -1);
 }
