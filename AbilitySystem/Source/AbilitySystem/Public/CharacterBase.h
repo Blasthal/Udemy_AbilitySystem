@@ -9,6 +9,7 @@
 
 #include "CharacterBase.generated.h"
 
+
 UCLASS()
 class ABILITYSYSTEM_API ACharacterBase
 	: public ACharacter
@@ -38,6 +39,10 @@ public:
 	// GameplayAbilityを適用する
 	UFUNCTION(BlueprintCallable, Category = "CharacterBase")
 	void AcquireAbility(TSubclassOf<UGameplayAbility> AbilityToAcquire);
+
+    // GameplayAbilityを適用する
+	UFUNCTION(BlueprintCallable, Category = "CharacterBase")
+	void AcquireAbilities(TArray<TSubclassOf<UGameplayAbility>> AbilityToAcquire);
 
 
 private:
@@ -128,4 +133,8 @@ public:
 	// HP満タン状態のゲームプレイタグ
 	UPROPERTY(EditAnywhere, Category = "CharacterBase")
 	FGameplayTag FullHealthTag;
+
+
+private:
+    void AddAbilityToUI(TSubclassOf<class UGameplayAbilityBase> AbilityToAdd);
 };
