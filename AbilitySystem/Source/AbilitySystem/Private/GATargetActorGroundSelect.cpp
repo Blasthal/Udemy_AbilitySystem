@@ -113,6 +113,13 @@ void AGATargetActorGroundSelect::ConfirmTargetingAndContinue()
         }
     }
 
+    FGameplayAbilityTargetData_LocationInfo* CenterLocation = new FGameplayAbilityTargetData_LocationInfo();
+    if (DecalComponent)
+    {
+        CenterLocation->TargetLocation.LocationType = EGameplayAbilityTargetingLocationType::LiteralTransform;
+        CenterLocation->TargetLocation.LiteralTransform = DecalComponent->GetComponentTransform();
+    }
+
     if (0 < OverlappedActors.Num())
     {
         const FGameplayAbilityTargetDataHandle TargetData = this->StartLocation.MakeTargetDataHandleFromActors(OverlappedActors);
@@ -120,7 +127,7 @@ void AGATargetActorGroundSelect::ConfirmTargetingAndContinue()
     }
     else
     {
-        TargetDataReadyDelegate.Broadcast(FGameplayAbilityTargetDataHandle());
+        TargetDataReadyDelegate.Broadcast(FGameplayAbilityTargetDataHandle(CenterLocation));
     }
 }
 
