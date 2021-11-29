@@ -22,9 +22,20 @@ public:
 	virtual void StartTargeting(UGameplayAbility* Ability) override;
     virtual void ConfirmTargetingAndContinue() override;
 
+
+private:
     UFUNCTION(BlueprintCallable, Category = "GroundSelect")
     bool GetPlayerLookingPoint(FVector& OutViewPoint);
+    
+    UPROPERTY(EditAnywhere, Category = "GroundSelect")
+    bool bDrawDebug = false;
 
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "GroundSelect", meta=(ExposeOnSpawn=true))
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "GroundSelect", meta=(AllowPrivateAccess = "true", ExposeOnSpawn=true))
     float Radius = 100.0f;
+
+
+    USceneComponent* RootComponent = nullptr;
+
+    UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "GroundSelect", meta = (AllowPrivateAccess = "true"))
+    UDecalComponent* DecalComponent = nullptr;
 };
