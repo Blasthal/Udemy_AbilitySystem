@@ -59,6 +59,7 @@ void AGATargetActorGroundSelect::StartTargeting(UGameplayAbility* Ability)
 {
     Super::StartTargeting(Ability);
 
+    OwningAbility = Ability;
     this->MasterPC = Cast<APlayerController>(Ability->GetOwningActorFromActorInfo()->GetInstigatorController());
 
     DecalComponent->DecalSize = FVector(Radius);
@@ -66,6 +67,7 @@ void AGATargetActorGroundSelect::StartTargeting(UGameplayAbility* Ability)
 
 void AGATargetActorGroundSelect::ConfirmTargetingAndContinue()
 {
+    // ïségóp
     //Super::ConfirmTargetingAndContinue();
 
 
